@@ -9,6 +9,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import db from "./config/db.js";
 import { getSubcategory } from "./controllers/serviceController.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +35,8 @@ app.get("/subcategory/:serviceId", getSubcategory);
 
 // Static images
 app.use("/images", express.static(path.join(__dirname, "images")));
+
+app.use("/bookings", bookingRoutes);
 
 
 // ── ERROR HANDLER ────────────────────────────────────────────
