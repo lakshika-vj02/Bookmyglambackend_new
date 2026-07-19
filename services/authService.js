@@ -8,10 +8,19 @@ export const registerUser = (name, email, password, gender, phone_no, role, call
   `;
 
   db.query(sql, [name, email, password, gender, phone_no, role], (err, result) => {
-    
     if (err) {
-      console.log("🔥 DB REGISTER ERROR:", err); // 🔥 DEBUG LINE
+      console.log("🔥 DB REGISTER ERROR:", err);
       return callback(err, null);
+    }
+
+    if (role === 'artist') {
+      const artistSql = `
+        INSERT INTO artists (name, email, phone, gender, user_id)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+      db.query(artistSql, [name, email, phone_no, gender, result.insertId], (err2) => {
+        if (err2) console.log("🔥 DB ARTIST INSERT ERROR:", err2);
+      });
     }
 
     return callback(null, result);

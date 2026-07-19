@@ -15,9 +15,13 @@ export const login = (req, res, next) => {
     if (err) return next(err); // 🔥 IMPORTANT
 
     if (result.length > 0) {
+      const user = result[0];
       return res.json({
         success: true,
-        role: result[0].role
+        role: user.role,
+        userId: user.id,
+        name: user.name,
+        email: user.email
       });
     } else {
       return res.status(401).json({
