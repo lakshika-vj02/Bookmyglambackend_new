@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import artistRoutes from "./routes/artistRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import db from "./config/db.js";
@@ -28,6 +29,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/services", serviceRoutes);
 
 app.use("/artists", artistRoutes);
+app.use("/bookings", bookingRoutes);
 
 // Frontend calls: GET /subcategory/:serviceId  → Level 2 subcategories
 app.get("/subcategory/:serviceId", getSubcategory);

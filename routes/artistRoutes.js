@@ -92,7 +92,7 @@ router.get("/:id/services", (req, res) => {
       s.image
     FROM artist_services ars
     JOIN service_subcategories s
-      ON ars.subcategory_id = s.id
+      ON ars.service_id = s.service_id
     WHERE ars.artist_id = ?;
   `;
 
