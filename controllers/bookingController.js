@@ -1,11 +1,11 @@
 import db from "../config/db.js";
+export const createBooking = (req, res) => {
 console.log("Create Booking API Hit");
 console.log(req.body);
-export const createBooking = (req, res) => {
-
   const {
     user_id,
     artist_id,
+    artist_name,
     service_id,
     booking_date,
     time_slot,
@@ -21,6 +21,7 @@ export const createBooking = (req, res) => {
     (
       user_id,
       artist_id,
+      artist_name,
       service_id,
       booking_date,
       time_slot,
@@ -31,7 +32,7 @@ export const createBooking = (req, res) => {
       payment_method,
       payment_status
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   db.query(
@@ -39,6 +40,7 @@ export const createBooking = (req, res) => {
     [
       user_id,
       artist_id,
+      artist_name,
       service_id,
       booking_date,
       time_slot,
