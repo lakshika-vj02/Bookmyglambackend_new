@@ -1,73 +1,82 @@
 import db from "../config/db.js";
+
 export const createBooking = (req, res) => {
-console.log("Create Booking API Hit");
-console.log(req.body);
   const {
-    user_id,
-    artist_id,
-    artist_name,
-    service_id,
-    booking_date,
-    time_slot,
-    address,
-    total_price,
-    notes,
-    payment_method,
-    payment_status
-  } = req.body;
+  user_id,
+  artist_id,
+  artist_name,
+  service_id,
+  booking_date,
+  time_slot,
+  address,
+  total_price,
+  notes,
+  payment_method,
+  payment_status,
+  customer_name,
+  customer_phone,
+  services
+} = req.body;
 
-  const sql = `
-    INSERT INTO bookings
-    (
-      user_id,
-      artist_id,
-      artist_name,
-      service_id,
-      booking_date,
-      time_slot,
-      address,
-      status,
-      total_price,
-      notes,
-      payment_method,
-      payment_status
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
+const sql = `
+  INSERT INTO bookings
+(
+  user_id,
+  artist_id,
+  artist_name,
+  service_id,
+  booking_date,
+  time_slot,
+  address,
+  status,
+  total_price,
+  notes,
+  payment_method,
+  payment_status,
+  customer_name,
+  customer_phone,
+  services
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-  db.query(
-    sql,
-    [
-      user_id,
-      artist_id,
-      artist_name,
-      service_id,
-      booking_date,
-      time_slot,
-      address,
-      "pending",
-      total_price,
-      notes,
-      payment_method,
-      payment_status
-    ],
-    (err, result) => {
+  const values = [
+  user_id,
+  artist_id,
+  artist_name,
+  service_id,
+  booking_date,
+  time_slot,
+  address,
+  "pending",
+  total_price,
+  notes,
+  payment_method,
+  payment_status,
+  customer_name,
+  customer_phone,
+  JSON.stringify(services)
+];
+console.log("SQL Query:");
+console.log(sql);
 
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: err.message
-        });
-      }
-      
+console.log("Values:");
+console.log(values); 
+  // Store the query instance so we can inspect it
+  db.query(sql, values, (err, result) => {
+   if (err) {
+    console.log("MySQL Error:", err);
+    console.log("SQL:", sql);
+    console.log("Values:", values);
 
-      res.json({
-        success: true,
-        message: "Booking Saved Successfully",
-        bookingId: result.insertId
-      });
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
 
-    }
-  );
-
-};
+  res.json({
+    success: true,
+    message: "Booking Saved Successfully"
+  });
+});
+}
