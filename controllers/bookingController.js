@@ -16,6 +16,7 @@ export const createBooking = (req, res) => {
     payment_status,
     customer_name,
     customer_phone,
+    customer_email,
     services
   } = req.body;
 
@@ -26,7 +27,7 @@ export const createBooking = (req, res) => {
       time_slot, address, status, total_price, notes, 
       payment_method, payment_status, customer_name, customer_phone, services
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`;
 
   const values = [
     user_id,
@@ -42,6 +43,7 @@ export const createBooking = (req, res) => {
     payment_method,
     payment_status,
     customer_name,
+    customer_email,
     customer_phone,
     JSON.stringify(services)
   ];
