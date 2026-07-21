@@ -1,82 +1,83 @@
 import db from "../config/db.js";
 
+// 1. CREATE BOOKING FUNCTION (POST)
 export const createBooking = (req, res) => {
   const {
-  user_id,
-  artist_id,
-  artist_name,
-  service_id,
-  booking_date,
-  time_slot,
-  address,
-  total_price,
-  notes,
-  payment_method,
-  payment_status,
-  customer_name,
-  customer_phone,
-  services
-} = req.body;
+    user_id,
+    artist_id,
+    artist_name,
+    service_id,
+    booking_date,
+    time_slot,
+    address,
+    total_price,
+    notes,
+    payment_method,
+    payment_status,
+    customer_name,
+    customer_phone,
+    services
+  } = req.body;
 
-const sql = `
-  INSERT INTO bookings
-(
-  user_id,
-  artist_id,
-  artist_name,
-  service_id,
-  booking_date,
-  time_slot,
-  address,
-  status,
-  total_price,
-  notes,
-  payment_method,
-  payment_status,
-  customer_name,
-  customer_phone,
-  services
-)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `
+    INSERT INTO bookings
+    (
+      user_id, artist_id, artist_name, service_id, booking_date, 
+      time_slot, address, status, total_price, notes, 
+      payment_method, payment_status, customer_name, customer_phone, services
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
-  user_id,
-  artist_id,
-  artist_name,
-  service_id,
-  booking_date,
-  time_slot,
-  address,
-  "pending",
-  total_price,
-  notes,
-  payment_method,
-  payment_status,
-  customer_name,
-  customer_phone,
-  JSON.stringify(services)
-];
-console.log("SQL Query:");
-console.log(sql);
+    user_id,
+    artist_id,
+    artist_name,
+    service_id,
+    booking_date,
+    time_slot,
+    address,
+    "pending",
+    total_price,
+    notes,
+    payment_method,
+    payment_status,
+    customer_name,
+    customer_phone,
+    JSON.stringify(services)
+  ];
 
-console.log("Values:");
-console.log(values); 
-  // Store the query instance so we can inspect it
   db.query(sql, values, (err, result) => {
-   if (err) {
-    console.log("MySQL Error:", err);
-    console.log("SQL:", sql);
-    console.log("Values:", values);
+    if (err) {
+      console.log("MySQL Error:", err);
+      return res.status(500).json({ success: false, message: err.message });
+    }
 
-    return res.status(500).json({
-      success: false,
-      message: err.message
-    });
+    res.json({ success: true, message: "Booking Saved Successfully" });
+  });
+};
+
+// 2. GET BOOKINGS FUNCTION (GET) - MySQL version
+export const getBookings = (req, res) => {
+  const { customer_phone } = req.query;
+  
+  let sql = "SELECT * FROM bookings";
+  let values = [];
+  
+  // Agar phone number se search kiya hai
+  if (customer_phone) {
+    sql += " WHERE customer_phone = ?";
+    values.push(customer_phone);
   }
 
-  res.json({
-    success: true,
-    message: "Booking Saved Successfully"
+  // Latest booking pehle
+  sql += " ORDER BY booking_date DESC, time_slot DESC";
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error("MySQL Error:", err);
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+    
+    res.status(200).json(results);
   });
-});
-}
+};
