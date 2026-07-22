@@ -2,6 +2,8 @@ import db from "../config/db.js";
 
 // 1. CREATE BOOKING FUNCTION (POST)
 export const createBooking = (req, res) => {
+  console.log("BODY =>", req.body);
+  console.log("HEADERS =>", req.headers);
   const {
     user_id,
     artist_id,
@@ -15,8 +17,8 @@ export const createBooking = (req, res) => {
     payment_method,
     payment_status,
     customer_name,
-    customer_phone,
     customer_email,
+    customer_phone,
     services
   } = req.body;
 
@@ -25,7 +27,7 @@ export const createBooking = (req, res) => {
     (
       user_id, artist_id, artist_name, service_id, booking_date, 
       time_slot, address, status, total_price, notes, 
-      payment_method, payment_status, customer_name, customer_phone, services
+      payment_method, payment_status, customer_name, customer_phone, services,customer_email
     )
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`;
 
