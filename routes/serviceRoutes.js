@@ -1,5 +1,5 @@
 import express from "express";
-import { getServices, getSubcategory, getSubcategoryItems } from "../controllers/serviceController.js";
+import { getServices, getSubcategory, getSubcategoryItems,addService, updateService,deleteService} from "../controllers/serviceController.js";
 
 const router = express.Router();
 
@@ -12,5 +12,12 @@ router.get("/:serviceId/subcategories", getSubcategory);
 
 // GET /services/:serviceId/subcategories/:subcategoryId/items → items of a subcategory
 router.get("/:serviceId/subcategories/:subcategoryId/items", getSubcategoryItems);
+// Add Service
+router.post("/", addService);
 
+// Update Service
+router.put("/:id", updateService);
+
+// Delete Service
+router.delete("/:id", deleteService);
 export default router;

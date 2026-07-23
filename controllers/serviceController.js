@@ -98,3 +98,104 @@ export const getSubcategoryItems = (req, res) => {
   });
 
 };
+// ADD SERVICE
+export const addService = (req, res) => {
+
+  const {
+    name,
+    description,
+    category,
+    price,
+    image,
+    duration,
+    active
+  } = req.body;
+
+  const sql = `
+    INSERT INTO services
+    (name, description, category, price, image, duration, active)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      name,
+      description,
+      category,
+      price,
+      image,
+      duration,
+      active
+    ],
+    (err, result) => {
+
+      if (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true,
+        message: "Service Added Successfully"
+      });
+
+    }
+  );
+};
+
+
+// UPDATE SERVICE
+export const updateService = (req, res) => {
+
+  const { id } = req.params;
+  const { name, category, description, image } = req.body;
+
+  const sql =
+    "UPDATE services SET name=?, category=?, description=?, image=? WHERE id=?";
+
+  db.query(
+    sql,
+    [name, category, description, image, id],
+    (err, result) => {
+
+      if (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true,
+        message: "Service Updated Successfully",
+      });
+
+    }
+  );
+
+};
+
+
+// DELETE SERVICE
+export const deleteService = (req, res) => {
+
+  const { id } = req.params;
+
+  db.query(
+    "DELETE FROM services WHERE id=?",
+    [id],
+    (err, result) => {
+
+      if (err) {
+        console.log(err);
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true,
+        message: "Service Deleted Successfully",
+      });
+
+    }
+  );
+
+};
