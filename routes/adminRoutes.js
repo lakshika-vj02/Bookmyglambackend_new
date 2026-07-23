@@ -5,10 +5,12 @@ import {
   getServicesCount, 
   getTotalRevenue, 
   getAppointmentsStatus,
-   deleteUser
+   deleteUser,
+   getUsers,
+    getAllBookings,
+  updateBookingStatus
   
 } from "../controllers/adminController.js";
-import { getUsers } from "../controllers/adminController.js";
 
 const router = express.Router();
 
@@ -18,6 +20,8 @@ router.get("/services/count", getServicesCount);
 router.get("/payments/total", getTotalRevenue);
 router.get("/users", getUsers);
 router.get("/appointments/status", getAppointmentsStatus);
+router.get("/bookings", getAllBookings);
+router.put("/bookings/:id", updateBookingStatus);
 
 //delete
 router.delete("/users/:id", deleteUser);

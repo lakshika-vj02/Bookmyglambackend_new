@@ -88,3 +88,53 @@ export const deleteUser = (req, res) => {
     });
   });
 };
+export const getAllBookings = (req, res) => {
+  const sql = `
+    SELECT
+      id,
+      customer_name,
+      customer_phone,
+      customer_email,
+      artist_name,
+      services,
+      booking_date,
+      time_slot,
+      status,
+      total_price,
+      payment_method,
+      payment_status
+    FROM bookings
+    ORDER BY id DESC
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: err.message,
+      });
+    }
+
+    res.json(result);
+  });
+};
+export const updateBookingStatus = (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const sql = "UPDATE bookings SET status=? WHERE id=?";
+
+  db.query(sql, [status, id], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Booking status updated successfully",
+    });
+  });
+};
