@@ -16,13 +16,39 @@ export const login = (req, res, next) => {
 
     if (result.length > 0) {
       const user = result[0];
-      return res.json({
-        success: true,
-        role: user.role,
-        userId: user.id,
-        name: user.name,
-        email: user.email
-      });
+     if (
+    user.email.toLowerCase() === "lakshika@gmail.com" &&
+    user.role === "admin"
+  ) {
+    return res.json({
+      success: true,
+      role: "admin",
+      userId: user.id,
+      name: user.name,
+      email: user.email
+    });
+  }
+
+  // Artist Login
+  if (user.role === "artist") {
+    return res.json({
+      success: true,
+      role: "artist",
+      userId: user.id,
+      name: user.name,
+      email: user.email
+    });
+  }
+
+  // Normal User Login
+  return res.json({
+    success: true,
+    role: "user",
+    userId: user.id,
+    name: user.name,
+    email: user.email
+  });
+
     } else {
       return res.status(401).json({
         success: false,

@@ -45,9 +45,9 @@ export const createBooking = (req, res) => {
     payment_method,
     payment_status,
     customer_name,
-    customer_email,
     customer_phone,
-    JSON.stringify(services)
+    JSON.stringify(services),
+    customer_email,
   ];
 
   db.query(sql, values, (err, result) => {

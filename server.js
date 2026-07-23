@@ -12,6 +12,18 @@ import { fileURLToPath } from "url";
 import db from "./config/db.js";
 import { getSubcategory, getSubcategoryItems } from "./controllers/serviceController.js";
 
+// Auto-migrate missing column
+db.query(
+  "ALTER TABLE bookings ADD COLUMN customer_email VARCHAR(150)",
+  (err) => {
+    if (err && err.code !== 'ER_DUP_FIELDNAME') {
+      console.log("Migration Note: customer_email column might already exist or DB is unavailable yet.");
+    } else if (!err) {
+      console.log("Migration Success: Added customer_email column to bookings table.");
+    }
+  }
+);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -39,6 +51,29 @@ app.get("/subcategory-items/:subcategoryId", getSubcategoryItems);
 
 // Static images
 app.use("/images", express.static(path.join(__dirname, "images")));
+// ── ERROR HANDLER ────────────────────────────────────────────
+app.use((err, req, res, next) => {
+
+  console.error("🔥 ERROR:", err);
+
+  res.status(500).json({
+    success: false,
+    message: err.message || "Internal Server Error"
+  });
+app.get("/test", (req, res) => {
+  res.send("Server Working");
+});
+});
+
+
+app.listen(process.env.PORT, () => {
+
+  console.log(
+    `🚀 Server running on port ${process.env.PORT}`
+  );
+
+});
+
 
 
 // ── ERROR HANDLER ────────────────────────────────────────────

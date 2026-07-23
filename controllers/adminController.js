@@ -51,3 +51,20 @@ export const getAppointmentsStatus = (req, res) => {
     res.json(statusCounts);
   });
 };
+// ✅ Get All Users
+export const getUsers = (req, res) => {
+  const sql = `
+    SELECT id, name, email, phone_no, role, created_at
+    FROM users
+    WHERE role = 'user'
+    ORDER BY id DESC
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    res.json(result);
+  });
+};
