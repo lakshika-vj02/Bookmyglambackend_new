@@ -5,6 +5,7 @@ import {
   getServicesCount, 
   getTotalRevenue, 
   getAppointmentsStatus,
+   deleteUser
   
 } from "../controllers/adminController.js";
 import { getUsers } from "../controllers/adminController.js";
@@ -17,5 +18,8 @@ router.get("/services/count", getServicesCount);
 router.get("/payments/total", getTotalRevenue);
 router.get("/users", getUsers);
 router.get("/appointments/status", getAppointmentsStatus);
+
+//delete
+router.delete("/users/:id", deleteUser);
 
 export default router;

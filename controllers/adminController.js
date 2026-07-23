@@ -68,3 +68,23 @@ export const getUsers = (req, res) => {
     res.json(result);
   });
 };
+//Delete User
+export const deleteUser = (req, res) => {
+  const { id } = req.params;
+
+  const sql = "DELETE FROM users WHERE id = ?";
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  });
+};
