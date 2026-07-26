@@ -143,7 +143,7 @@ router.get("/by-user/:userId", (req, res) => {
 });
 
 
-// ── UPDATE ARTIST PROFILE (Price, Bio, Specialty) ────────────
+// ── UPDATE ARTIST PROFILE (base_price, Bio, Specialty) ────────────
 router.put("/:id", (req, res) => {
   const { id } = req.params;
   const { bio, specialty, base_price, phone } = req.body;
@@ -160,4 +160,53 @@ router.put("/:id", (req, res) => {
   });
 });
 
+
+router.post("/", (req, res) => {
+  const {
+    name,
+    email,
+    phone,
+    specialty,
+    experience_years,
+    location,
+    base_price,
+    gender,
+    profile_image,
+  } = req.body;
+
+  const sql = `
+    INSERT INTO artists
+    (name, email, phone, specialty, experience_years, location, base_price, gender, profile_image)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    sql,
+    [
+      name,
+      email,
+      phone,
+      specialty,
+      experience_years,
+      location,
+      base_price,
+      gender,
+      profile_image,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: false,
+          message: "Database Error",
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Artist added successfully",
+      });
+    }
+  );
+});
 export default router;
