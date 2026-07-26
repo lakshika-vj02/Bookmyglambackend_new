@@ -233,4 +233,36 @@ router.put("/:id", upload.single("profile_image"), (req, res) => {
     });
   });
 });
+
+// ── DELETE ARTIST WITH CASCADE ──────────────────────────────────
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+
+  // Step 1: Remove associated mappings in artist_services table
+  db.query("DELETE FROM artist_services WHERE artist_id = ?", [id], (err1) => {
+    if (err1 && err1.code !== "ER_NO_SUCH_TABLE") {
+      console.error("Error clearing artist_services:", err1);
+    }
+
+    // Step 2: Remove associated reviews if any
+    db.query("DELETE FROM reviews WHERE artist_id = ?", [id], (err2) => {
+      if (err2 && err2.code !== "ER_NO_SUCH_TABLE") {
+        console.error("Error clearing artist reviews:", err2);
+      }
+
+      // Step 3: Delete artist from artists table
+      db.query("DELETE FROM artists WHERE id = ?", [id], (err3, result) => {
+        if (err3) {
+          console.error("Error deleting artist:", err3);
+          return res.status(500).json({ success: false, message: "Database Error: " + err3.message });
+        }
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ success: false, message: "Artist not found" });
+        }
+        res.json({ success: true, message: "Artist Deleted Successfully" });
+      });
+    });
+  });
+});
+
 export default router;
