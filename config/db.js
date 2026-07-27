@@ -16,6 +16,6 @@ db.connect((err) => {
   } else {
     console.log("✅ Database connected");
   }
-});               ``
+});              
 
 export default db;
