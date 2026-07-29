@@ -43,7 +43,18 @@ export const getSubcategory = (req, res) => {
   const { serviceId } = req.params;
 
   // ✅ Correct table name: service_subcategories (plural)
-  const sql = "SELECT * FROM service_subcategories WHERE service_id = ?";
+  // const sql = "SELECT * FROM service_subcategories WHERE service_id = ?";
+  const sql = `
+SELECT
+    s.*,
+    COUNT(i.id) AS itemCount
+FROM service_subcategories s
+LEFT JOIN subcategory_items i
+    ON s.id = i.subcategory_id
+    AND i.active = 1
+WHERE s.service_id = ?
+GROUP BY s.id
+`;
 
   db.query(sql, [serviceId], (err, result) => {
 

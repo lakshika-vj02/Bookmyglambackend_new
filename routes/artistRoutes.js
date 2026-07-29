@@ -5,6 +5,43 @@ import upload from "../middleware/upload.js";
 const router = express.Router();
 
 
+// ── ADD NEW ARTIST (Admin) ────────────────────────────────────
+router.post("/", upload.single("profile_image"), (req, res) => {
+  const {
+    name,
+    email,
+    phone,
+    specialty,
+    experience_years,
+    location,
+    base_price,
+    gender,
+  } = req.body;
+
+  if (!name || !specialty) {
+    return res.status(400).json({ success: false, message: "Name and Specialty are required" });
+  }
+
+  const profile_image = req.file ? req.file.filename : null;
+
+  const sql = `
+    INSERT INTO artists (name, email, phone, specialty, experience_years, location, base_price, gender, profile_image)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [name, email, phone, specialty, experience_years, location, base_price, gender, profile_image];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ success: false, message: "Database Error: " + err.message });
+    }
+
+    res.json({ success: true, message: "Artist Added Successfully", artistId: result.insertId });
+  });
+});
+
+
 // ── GET ALL ARTISTS ──────────────────────────────────────────
 router.get("/", (req, res) => {
 

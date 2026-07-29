@@ -8,10 +8,13 @@ const router = express.Router();
 router.get("/", getServices);
 
 // GET /services/:serviceId/subcategories → subcategories of a service
+
 router.get("/:serviceId/subcategories", getSubcategory);
+
 
 // GET /services/:serviceId/subcategories/:subcategoryId/items → items of a subcategory
 router.get("/:serviceId/subcategories/:subcategoryId/items", getSubcategoryItems);
+
 // Add Service
 router.post("/", addService);
 

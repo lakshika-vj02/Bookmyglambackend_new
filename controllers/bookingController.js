@@ -85,3 +85,35 @@ export const getBookings = (req, res) => {
     res.status(200).json(results);
   });
 };
+// 3. CUSTOMER CANCEL BOOKING
+export const cancelBooking = (req, res) => {
+  const { id } = req.params;
+
+  const sql = `
+    UPDATE bookings
+    SET status = 'cancelled'
+    WHERE id = ? AND status = 'pending'
+  `;
+
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({
+        success: false,
+        message: "Server Error",
+      });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Booking cannot be cancelled.",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Booking cancelled successfully",
+    });
+  });
+};
