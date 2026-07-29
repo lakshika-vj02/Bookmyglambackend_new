@@ -160,14 +160,14 @@ export const addService = (req, res) => {
 export const updateService = (req, res) => {
 
   const { id } = req.params;
-  const { name, category, description, image } = req.body;
+  const { name, category, description, price, duration, image } = req.body;
 
   const sql =
-    "UPDATE services SET name=?, category=?, description=?, image=? WHERE id=?";
+    "UPDATE services SET name=?, category=?, description=?, price=?, duration=?, image=? WHERE id=?";
 
   db.query(
     sql,
-    [name, category, description, image, id],
+    [name, category, description, price, duration, image, id],
     (err, result) => {
 
       if (err) {
